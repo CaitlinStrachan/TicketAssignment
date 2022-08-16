@@ -21,6 +21,18 @@
 </head>
 <body>
     <h1>Active tickets</h1>
+    {% block content %}
+        <h1>{% block title %} Tickets {% endblock %}</h1>
+        {% for post in posts %}
+        <div class="'Tickets'>
+            <h1>{{ tickets['TicketID'] }}</h1>
+            <h2>{{ tickets['Description'] }}</h2>
+            <p>{{ tickets['ClientBackup'] }}</p>
+            <p>{{ tickets['Priortiy'] }}</p>
+            <p>{{ tickets['Status'] }}</p>
+        </div>
+        {% endfor %}
+    {% endblock %}
     <a href="dashboard" class="button">Back to Escalations Portal</a>
 </body>
 </html>

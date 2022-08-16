@@ -31,6 +31,10 @@
     <Compile Include="Login.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TicketSystem\populate_db.py" />
+    <Compile Include="TicketSystem\create_db.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TicketSystem\views.py">
       <SubType>Code</SubType>
     </Compile>
