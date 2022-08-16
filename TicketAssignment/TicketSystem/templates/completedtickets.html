@@ -21,6 +21,32 @@
 </head>
 <body>
     <h1>Completed tickets</h1>
+    <table>
+        <thead>
+        <td>ID</td>
+        <td>Description</td>
+        <td>Product Name</td>
+        <td>Team ID</td>
+        <td>Client Backup Location</td>
+        <td>Priortiy</td>
+        <td>Status</td>
+        <td>Date Raised</td>
+        <td>Date Resolved</td>
+        </thead>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ticket["TicketID"]}}</td>
+            <td>{{ticket["Description"]}}</td>
+            <td>{{ticket["ProductName"]}}</td>
+            <td>{{ticket["TeamID"]}}</td>
+            <td>{{ticket["ClientBackup"]}}</td>
+            <td>{{ticket["Priortiy"]}}</td>
+            <td>{{ticket["Status"]}}</td>
+            <td>{{ticket["DateRaised"]}}</td>
+            <td>{{ticket["DateResolved"]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
     <a href="dashboard" class="button">Back to Escalations Portal</a>
 </body>
 </html>

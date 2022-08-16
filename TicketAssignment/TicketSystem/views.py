@@ -20,8 +20,9 @@ def home():
 def login():
     """Renders a log in page"""
     conn = get_db_connection()
-    users = conn.execute('SELECT * FROM USERS').fetchall()
-    conn.close()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM USERS')
+    users = cursor.fetchall()
     return render_template("login.html", users=users)
 
 @app.route("/dashboard")
@@ -33,15 +34,22 @@ def dashboard():
 def activetickets():
     """Renders a log in page"""
     conn = get_db_connection()
-    #EDIT THIS TO ONLY LOAD THOSE WITH NOT A 'DONE' STATUS
-    tickets = conn.execute('SELECT * FROM Tickets').fetchall()
-    conn.close()
+    cursor = conn.cursor()
+    #ONLY LOAD THOSE WITH NOT A 'DONE' STATUS
+    cursor.execute('SELECT * FROM Tickets WHERE Status NOT LIKE "Done"')
+    tickets = cursor.fetchall()
     return render_template("activetickets.html", tickets=tickets)
 
 @app.route("/completedtickets")
 def completedtickets():
     """Renders a log in page"""
-    return render_template("completedtickets.html")
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    #ONLY LOAD THOSE WITH A 'DONE' STATUS
+    cursor.execute('SELECT * FROM Tickets WHERE Status = "Done"')
+    tickets = cursor.fetchall()
+    """Renders a log in page"""
+    return render_template("completedtickets.html", tickets=tickets)
 
 @app.route("/newticket")
 def newticket():
