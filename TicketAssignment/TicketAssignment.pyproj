@@ -40,6 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <Content Include="TicketSystem\templates\newticket.html" />
+    <Content Include="TicketSystem\templates\completedtickets.html" />
+    <Content Include="TicketSystem\templates\activetickets.html" />
+    <Content Include="TicketSystem\templates\dashboard.html" />
+    <Content Include="TicketSystem\templates\homepage.html" />
+    <Content Include="TicketSystem\templates\login.html" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
