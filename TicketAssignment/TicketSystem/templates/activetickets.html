@@ -44,11 +44,10 @@
             <td>{{ticket["Status"]}}</td>
             <td>{{ticket["DateRaised"]}}</td>
             <td>{{ticket["DateResolved"]}}</td>
+            <td><a href='{{url_for("editactivetickets", TicketID=ticket.TicketID)}}'class="button">Edit</a></td>
         </tr>
         {% endfor %}
     </table>
-    <a href ="activetickets/edit" class="button">Edit</a>
-    <a class="button">Save</a>
     <a href="dashboard" class="button">Back to Escalations Portal</a>
 </body>
 </html>

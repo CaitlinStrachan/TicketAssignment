@@ -17,40 +17,51 @@
             margin: 4px 2px;
             cursor: pointer;
         }
+        .form-control {
+            width: 400px;            
+        }
     </style>
 </head>
 <body>
-    <h1>Edit tickets</h1>
+    <h1>Edit ticket {{tickets.TicketID}}</h1>
     <br/>
-    <form method="post">
-
+    <form method="post" action={{url_for("editactivetickets", TicketID=tickets.TicketID)}}}>
+        <div class='form-group'>
+            <label>Description</label><br />
+            <input type='text' name='Description' required class='form-control' value='{{tickets.Description}}' style="height:200px;" />
+        </div>
+        <div class='form-group'>
+            <label>Product Name</label><br />
+            <input type='text' name='ProductName' required class='form-control' value='{{tickets.ProductName}}' />
+        </div>
+        <div class='form-group'>
+            <label>Team ID</label><br />
+            <input type='text' name='TeamID' required class='form-control' value='{{tickets.TeamID}}' />
+        </div>
+        <div class='form-group'>
+            <label>Client Backup</label><br />
+            <input type='text' name='ClientBackup' required class='form-control' value='{{tickets.ClientBackup}}' />
+        </div>
+        <div class='form-group'>
+            <label>Priortiy</label><br />
+            <input type='text' name='Priortiy' required class='form-control' value='{{tickets.Priortiy}}' />
+        </div>
+        <div class='form-group'>
+            <label>Status</label><br />
+            <input type='text' name='Status' required class='form-control' value='{{tickets.Status}}' />
+        </div>
+        <div class='form-group'>
+            <label>Date Raised</label><br />
+            <input type='text' name='DateRaised' required class='form-control' value='{{tickets.DateRaised}}' readonly/>
+        </div>
+        <div class='form-group'>
+            <br />
+            <label>DateResolved</label>
+            <input type='date' name='DateResolved' class='form-control' value='{{tickets.DateResolved}}' />
+        </div>
+        <input type='submit' value='Save' class='button'>
     </form>
-    <table>
-        <thead>
-        <td>ID</td>
-        <td>Description</td>
-        <td>Product Name</td>
-        <td>Team ID</td>
-        <td>Client Backup Location</td>
-        <td>Priortiy</td>
-        <td>Status</td>
-        <td>Date Raised</td>
-        <td>Date Resolved</td>
-        </thead>
-        {% for ticket in tickets %}
-        <tr>
-            <td>{{ticket["TicketID"]}}</td>
-            <td>{{ticket["Description"]}}</td>
-            <td>{{ticket["ProductName"]}}</td>
-            <td>{{ticket["TeamID"]}}</td>
-            <td>{{ticket["ClientBackup"]}}</td>
-            <td>{{ticket["Priortiy"]}}</td>
-            <td>{{ticket["Status"]}}</td>
-            <td>{{ticket["DateRaised"]}}</td>
-            <td>{{ticket["DateResolved"]}}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <br />
     <a class="button">Save</a>
     <a class="button">Cancel</a>
 </body>
