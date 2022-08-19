@@ -3,7 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>Active tickets</title>
+    <title>Edit active tickets</title>
     <style>
         .button {
             background-color: #1c87c9;
@@ -20,7 +20,11 @@
     </style>
 </head>
 <body>
-    <h1>Active tickets</h1>
+    <h1>Edit tickets</h1>
+    <br/>
+    <form method="post">
+
+    </form>
     <table>
         <thead>
         <td>ID</td>
@@ -47,8 +51,7 @@
         </tr>
         {% endfor %}
     </table>
-    <a href ="activetickets/edit" class="button">Edit</a>
     <a class="button">Save</a>
-    <a href="dashboard" class="button">Back to Escalations Portal</a>
+    <a class="button">Cancel</a>
 </body>
 </html>
