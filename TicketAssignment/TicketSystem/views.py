@@ -132,13 +132,14 @@ def editactivetickets(TicketID):
         cursor=conn.cursor()
         cursor.execute("UPDATE Tickets SET Description=?,ProductName=?,TeamID=?,ClientBackup=?,Priority=?,Status=?,DateResolved=? WHERE TicketID=?", (Description,ProductName,TeamID,ClientBackup,Priority,Status,DateResolved,TicketID))
         conn.commit()
-        #flash('User Updated','success')
+        conn.close()
+        flash('Ticket Updated','success')
         return redirect(url_for("activetickets"))
     conn = get_db_connection()
     conn.row_factory=sql.Row
     cursor = conn.cursor()
     #ONLY LOAD THE SELECTED TICKET TO EDIT
-    cursor.execute('SELECT * FROM Tickets WHERE TicketID=?', TicketID)
+    cursor.execute('SELECT * FROM Tickets WHERE TicketID=?', [TicketID])
     tickets = cursor.fetchone()
     #check if user is admin 
     adminLevel = session['adminLevel']
@@ -174,7 +175,7 @@ def newticket():
         cursor=conn.cursor()
         cursor.execute("INSERT into Tickets (Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised) values (?,?,?,?,?,?,?)",(Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised))
         conn.commit()
-        #flash('Ticket Updated','success')
+        flash('Ticket Added','success')
         return redirect(url_for("dashboard"))   
     return render_template("newticket.html")
 
