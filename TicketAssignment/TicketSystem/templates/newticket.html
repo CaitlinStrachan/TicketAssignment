@@ -1,24 +1,15 @@
 ﻿<!DOCTYPE html>
+{% extends 'base.html' %}
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title>New Escalation</title>
     <style>
-        .button {
-            background-color: #1c87c9;
-            border: none;
-            color: white;
-            padding: 20px 34px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 20px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
+
     </style>
 </head>
+{% block content%}
 <body>
     <h1>Raise a new escalation</h1>
     <br />
@@ -52,9 +43,10 @@
             <label>Date Raised</label>
             <input type='text' name='DateRaised' class='form-control' />
         </div>
-        <input type='submit' value='Save' class='button'>
+        <input type='submit' value='Save' class='btn btn-success'>
     </form>
     <br />
-    <a href="dashboard" class="button">Back to Escalations Portal</a>
+    <a href="dashboard" class="btn btn-primary btn-lg">Back to Escalations Portal</a>
 </body>
+{% endblock %}
 </html>

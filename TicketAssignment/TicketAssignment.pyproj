@@ -48,7 +48,13 @@
   <ItemGroup>
     <Content Include="requirements.txt" />
     <Content Include="ticketdb.db" />
+    <Content Include="TicketSystem\static\css\style.css">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="TicketSystem\templates\activeticketsUser.html" />
+    <Content Include="TicketSystem\templates\base.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="TicketSystem\templates\notAdminErrorPage.html" />
     <Content Include="TicketSystem\templates\editactivetickets.html" />
     <Content Include="TicketSystem\templates\newticket.html" />
@@ -71,6 +77,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TicketSystem\" />
+    <Folder Include="TicketSystem\static\" />
+    <Folder Include="TicketSystem\static\css\" />
+    <Folder Include="TicketSystem\static\js\" />
     <Folder Include="TicketSystem\templates\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />

@@ -1,27 +1,20 @@
 ﻿<!DOCTYPE html>
+{% extends 'base.html' %}
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title>Unauthorised Access</title>
     <style>
-        .button {
-            background-color: #1c87c9;
-            border: none;
-            color: white;
-            padding: 20px 34px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 20px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
+
     </style>
 </head>
+
+{% block content%}
 <body>
     <h1>Unauthorised Access</h1>
     <p>Sorry - you do not have the relevant authorisation access to view this page. Please contact your system administrators if this is incorrect</p>
-    <a href="dashboard.html" class="button">Back to Escalations Portal</a>
+    <a href="dashboard.html" class="btn btn-primary btn-lg">Back to Escalations Portal</a>
 </body>
+{% endblock %}
 </html>
