@@ -35,12 +35,10 @@ def login():
 
 @app.route("/dashboard")
 def dashboard():
-    """Renders a log in page"""
     return render_template("dashboard.html")
 
 @app.route("/activetickets")
 def activetickets():
-    """Renders a log in page"""
     conn = get_db_connection()
     cursor = conn.cursor()
     #ONLY LOAD THOSE WITH NOT A 'DONE' STATUS
@@ -81,7 +79,6 @@ def completedtickets():
     #ONLY LOAD THOSE WITH A 'DONE' STATUS
     cursor.execute('SELECT * FROM Tickets WHERE Status = "Done"')
     tickets = cursor.fetchall()
-    """Renders a log in page"""
     return render_template("completedtickets.html", tickets=tickets)
 
 @app.route("/newticket", methods=['POST','GET'])
@@ -99,9 +96,19 @@ def newticket():
         cursor=conn.cursor()
         cursor.execute("INSERT into Tickets (Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised) values (?,?,?,?,?,?,?)",(Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised))
         conn.commit()
-        #flash('User Updated','success')
+        #flash('Ticket Updated','success')
         return redirect(url_for("dashboard"))   
     return render_template("newticket.html")
+
+@app.route("/deleteticket/<string:TicketID>",methods=['GET'])
+def deleteticket(TicketID):
+    conn = get_db_connection()
+    cursor=conn.cursor()
+    cursor.execute("delete from Tickets where TicketID=?",(TicketID,))
+    conn.commit()
+    #flash('Ticket Deleted','warning')
+    return redirect(url_for("activetickets"))
+
 
 if __name__ == "__main__":
     app.run()

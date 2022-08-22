@@ -45,6 +45,7 @@
             <td>{{ticket["DateRaised"]}}</td>
             <td>{{ticket["DateResolved"]}}</td>
             <td><a href='{{url_for("editactivetickets", TicketID=ticket.TicketID)}}' class="button">Edit</a></td>
+            <td><a href='{{url_for("deleteticket",TicketID=ticket.TicketID)}}' class='btn btn-danger' onclick='return confirm("Are You Sure")'>Delete</a></td>
         </tr>
         {% endfor %}
     </table>
