@@ -49,6 +49,7 @@
     <Content Include="requirements.txt" />
     <Content Include="ticketdb.db" />
     <Content Include="TicketSystem\templates\activeticketsUser.html" />
+    <Content Include="TicketSystem\templates\notAdminErrorPage.html" />
     <Content Include="TicketSystem\templates\editactivetickets.html" />
     <Content Include="TicketSystem\templates\newticket.html" />
     <Content Include="TicketSystem\templates\completedtickets.html" />

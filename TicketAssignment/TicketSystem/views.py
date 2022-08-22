@@ -140,7 +140,14 @@ def editactivetickets(TicketID):
     #ONLY LOAD THE SELECTED TICKET TO EDIT
     cursor.execute('SELECT * FROM Tickets WHERE TicketID=?', TicketID)
     tickets = cursor.fetchone()
-    return render_template("editactivetickets.html", tickets=tickets)
+    #check if user is admin 
+    adminLevel = session['adminLevel']
+    if 'Admin' in adminLevel:          
+       # User is loggedin show them the home page
+       return render_template("editactivetickets.html", tickets=tickets)
+    else: 
+       return render_template("notAdminErrorPage.html", tickets=tickets)
+    
 
 @app.route("/completedtickets")
 def completedtickets():
