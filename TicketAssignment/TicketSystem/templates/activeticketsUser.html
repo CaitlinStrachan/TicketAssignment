@@ -3,7 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>Active tickets - Admin</title>
+    <title>Active tickets - User</title>
     <style>
         .button {
             background-color: #1c87c9;
@@ -44,8 +44,6 @@
             <td>{{ticket["Status"]}}</td>
             <td>{{ticket["DateRaised"]}}</td>
             <td>{{ticket["DateResolved"]}}</td>
-            <td><a href='{{url_for("editactivetickets", TicketID=ticket.TicketID)}}' class="button">Edit</a></td>
-            <td><a href='{{url_for("deleteticket",TicketID=ticket.TicketID)}}' class='btn btn-danger' onclick='return confirm("Are You Sure")'>Delete</a></td>
         </tr>
         {% endfor %}
     </table>

@@ -1,10 +1,15 @@
+from functools import wraps
+from winreg import REG_NOTIFY_CHANGE_ATTRIBUTES
 from flask import Flask,render_template,request,redirect,session,url_for,flash
+from flask_wtf import FlaskForm
 from TicketSystem import app
 import sqlite3 as sql
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import os
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired 
 #from forms import LoginForm
 #set secret key 
 secretkey = os.urandom(12).hex()
@@ -18,6 +23,20 @@ app.config['SECRET_KEY'] = secretkey
 
 # Intialize MySQL
 mysql = MySQL(app)
+
+#initialize log in manager 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_ID):
+    return User.get(userID)
+
+#create a form class 
+#class UserForm(FlaskForm):
+ #   username = StringField("Username", validators=[DataRequired()])
+  #  submit = SubmitField("Submit")
 
 
 def get_db_connection():
@@ -53,6 +72,7 @@ def login():
             session['loggedin'] = True
             session['id'] = account['UserID']
             session['email'] = account['email']
+            session['adminLevel'] = account['AdminLevel']
             # Redirect to home page
             msg = 'Logged in successfully!'
             return redirect('dashboard')
@@ -61,11 +81,22 @@ def login():
             msg = 'Incorrect username/password!'
     return render_template("login.html", msg=msg)
 
+#check if user logged in
+def is_logged_in(f):
+	@wraps(f)
+	def wrap(*args,**kwargs):
+		if 'logged_in' in session:
+			return f(*args,**kwargs)
+		else:
+			flash('Unauthorized, Please Login','danger')
+			return redirect(url_for('login'))
+	return wrap
+
+
 @app.route("/dashboard")
 def dashboard():
      # Check if user is loggedin
     if 'loggedin' in session:
-        # User is loggedin show them the home page
         return render_template('dashboard.html', userID=session['id'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
@@ -77,7 +108,14 @@ def activetickets():
     #ONLY LOAD THOSE WITH NOT A 'DONE' STATUS
     cursor.execute('SELECT * FROM Tickets WHERE Status NOT LIKE "Done"')
     tickets = cursor.fetchall()
-    return render_template("activetickets.html", tickets=tickets)
+    #check if user is admin 
+    adminLevel = session['adminLevel']
+    if 'Admin' in adminLevel:          
+       # User is loggedin show them the home page
+       return render_template("activetickets.html", tickets=tickets)
+    else: 
+       return render_template("activeticketsUser.html", tickets=tickets)
+    
 
 @app.route("/activetickets/edit/<string:TicketID>", methods=['POST','GET'])
 def editactivetickets(TicketID):
@@ -141,6 +179,13 @@ def deleteticket(TicketID):
     conn.commit()
     #flash('Ticket Deleted','warning')
     return redirect(url_for("activetickets"))
+
+#logout
+@app.route("/logout")
+def logout():
+	session.clear()
+	#flash('You are now logged out','success')
+	return redirect(url_for('login'))
 
 
 if __name__ == "__main__":
