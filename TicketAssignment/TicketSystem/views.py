@@ -1,16 +1,23 @@
-from flask import Flask, render_template,request,redirect,url_for,flash
+from flask import Flask,render_template,request,redirect,session,url_for,flash
 from TicketSystem import app
 import sqlite3 as sql
+from flask_mysqldb import MySQL
+import MySQLdb.cursors
+import os
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
+#from forms import LoginForm
+#set secret key 
+secretkey = os.urandom(12).hex()
 
+# Enter your database connection details below
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'admin'
+app.config['MYSQL_DB'] = 'ticketdb'
+app.config['SECRET_KEY'] = secretkey
 
-# Make the WSGI interface available at the top level so wfastcgi can get it.
-wsgi_app = app.wsgi_app
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqllite:///ticket.db'
-
-#initialise the database
-#db = SQLAlchemy(app)
-
-#create db model 
+# Intialize MySQL
+mysql = MySQL(app)
 
 
 def get_db_connection():
@@ -24,18 +31,44 @@ def home():
     """Renders a welcome page."""
     return render_template("homepage.html")
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    """Renders a log in page"""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM USERS')
-    users = cursor.fetchall()
-    return render_template("login.html", users=users)
+    # Output message if something goes wrong...
+    msg = ''
+    # Check if "username" and "password" POST requests exist (user submitted form)
+    status=True
+    if request.method == 'POST':
+        # Create variables for easy access
+        email = request.form['email']
+        password = request.form['password']
+        #check account exists
+        conn = get_db_connection()
+        #cursor = mysql.connection.cursor()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM USERS WHERE Email=? AND Password=?", (email, password,))
+        account = cursor.fetchone()
+        # If account exists in accounts table in out database
+        if account:
+            # Create session data, we can access this data in other routes
+            session['loggedin'] = True
+            session['id'] = account['UserID']
+            session['email'] = account['email']
+            # Redirect to home page
+            msg = 'Logged in successfully!'
+            return redirect('dashboard')
+        else:
+            # Account doesnt exist or username/password incorrect
+            msg = 'Incorrect username/password!'
+    return render_template("login.html", msg=msg)
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
+     # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        return render_template('dashboard.html', userID=session['id'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route("/activetickets")
 def activetickets():
