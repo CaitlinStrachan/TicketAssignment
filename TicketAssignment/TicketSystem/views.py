@@ -1,7 +1,7 @@
 from flask import Flask, render_template,request,redirect,url_for,flash
 from TicketSystem import app
 import sqlite3 as sql
-from flask_sqlalchemy import SQLAlchemy
+
 
 # Make the WSGI interface available at the top level so wfastcgi can get it.
 wsgi_app = app.wsgi_app
@@ -84,9 +84,23 @@ def completedtickets():
     """Renders a log in page"""
     return render_template("completedtickets.html", tickets=tickets)
 
-@app.route("/newticket")
+@app.route("/newticket", methods=['POST','GET'])
 def newticket():
-    """Renders a log in page"""
+    if request.method=='POST':
+        Description=request.form['Description']
+        ProductName=request.form['ProductName']
+        TeamID=request.form['TeamID']
+        ClientBackup=request.form['ClientBackup']
+        Priority=request.form['Priortiy']
+        Status=request.form['Status']
+        DateRaised=request.form['DateRaised']
+        #DateResolved=request.form['DateResolved']       
+        conn = get_db_connection()
+        cursor=conn.cursor()
+        cursor.execute("INSERT into Tickets (Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised) values (?,?,?,?,?,?,?)",(Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised))
+        conn.commit()
+        #flash('User Updated','success')
+        return redirect(url_for("dashboard"))   
     return render_template("newticket.html")
 
 if __name__ == "__main__":

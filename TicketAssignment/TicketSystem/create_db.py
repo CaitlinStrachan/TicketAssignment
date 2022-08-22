@@ -6,19 +6,19 @@ conn = sql.connect('ticketdb.db')
 cur = conn.cursor()
 
 #Delete tables if already exist
-cur.execute("DROP TABLE USERS")
+cur.execute("DROP TABLE IF EXISTS USERS")
 
 cur.execute('''CREATE TABLE USERS
-         (UserID INT PRIMARY KEY     NOT NULL,
+         (UserID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
           Username           TEXT    NOT NULL,
           Email              VARCHAR(50)    NOT NULL,
           Password           VARCHAR(50)    NOT NULL,
           AdminLevel         TEXT    NOT NULL);''')
 print ("Users Table created successfully");
 
-cur.execute("DROP TABLE TEAMS")
+cur.execute("DROP TABLE IF EXISTS TEAMS")
 cur.execute('''CREATE TABLE TEAMS
-         (TeamID INT PRIMARY KEY        NOT NULL,
+         (TeamID INTEGER PRIMARY KEY AUTOINCREMENT,
           TeamName              TEXT    NOT NULL,
           PrimaryContactName    TEXT    NOT NULL,
           PrimaryContactEmail   VARCHAR(50)    NOT NULL,
@@ -26,19 +26,19 @@ cur.execute('''CREATE TABLE TEAMS
           SecondaryContactEmail VARCHAR(50)    NOT NULL);''')
 print ("Teams table created successfully");
 
-cur.execute("DROP TABLE Products")
+cur.execute("DROP TABLE IF EXISTS Products")
 
 cur.execute('''CREATE TABLE Products
-         (ProductID INT PRIMARY KEY     NOT NULL,
+         (ProductID INTEGER PRIMARY KEY AUTOINCREMENT,
           ProductName         TEXT      NOT NULL,
           ProductType         TEXT      NOT NULL,
           TeamID              INT       NOT NULL);''')
 print ("Products table created successfully");
 
-cur.execute("DROP TABLE Tickets")
+cur.execute("DROP TABLE IF EXISTS Tickets")
 
 cur.execute('''CREATE TABLE Tickets
-         (TicketID INT PRIMARY KEY         NOT NULL,
+         (TicketID INTEGER PRIMARY KEY AUTOINCREMENT,
           Description        TEXT          NOT NULL,
           ClientBackup       VARCHAR(50),
           Priority           VARCHAR(2)    NOT NULL,
@@ -50,7 +50,7 @@ cur.execute('''CREATE TABLE Tickets
 print ("Tickets table created successfully");
 
 #commit changes
-cur.commit()
+conn.commit()
 
 #close the connection
-cur.close()
+conn.close()
