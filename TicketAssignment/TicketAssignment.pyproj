@@ -17,6 +17,9 @@
     <Name>TicketAssignment</Name>
     <RootNamespace>TicketAssignment</RootNamespace>
     <InterpreterId>MSBuild|localEnv|$(MSBuildProjectFullPath)</InterpreterId>
+    <TestFramework>unittest</TestFramework>
+    <UnitTestPattern>*.py</UnitTestPattern>
+    <UnitTestRootDirectory>C:\Users\caitlin.strachan\Source\Repos\CaitlinStrachan\TicketAssignment\TicketAssignment\TicketSystem\tests\</UnitTestRootDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +39,9 @@
     </Compile>
     <Compile Include="TicketSystem\populate_db.py" />
     <Compile Include="TicketSystem\create_db.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TicketSystem\tests\test_adduser.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TicketSystem\views.py">
@@ -80,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TicketSystem\" />
+    <Folder Include="TicketSystem\tests\" />
     <Folder Include="TicketSystem\static\" />
     <Folder Include="TicketSystem\static\css\" />
     <Folder Include="TicketSystem\static\js\" />

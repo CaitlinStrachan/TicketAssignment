@@ -184,6 +184,7 @@ def newticket():
         cursor=conn.cursor()
         cursor.execute("INSERT into Tickets (Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised) values (?,?,?,?,?,?,?)",(Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised))
         conn.commit()
+        conn.close()
         flash('Ticket Added Successfully','success')
         return redirect(url_for("dashboard"))   
     return render_template("newticket.html")
@@ -194,6 +195,7 @@ def deleteticket(TicketID):
     cursor=conn.cursor()
     cursor.execute("delete from Tickets where TicketID=?",(TicketID,))
     conn.commit()
+    conn.close()
     flash('Ticket Deleted Sucesffully','warning')
     return redirect(url_for("activetickets"))
 
@@ -228,6 +230,7 @@ def newuser():
         cursor=conn.cursor()
         cursor.execute("INSERT into USERS (Username,Email,Password,AdminLevel) values (?,?,?,?)",(Username,Email,Password,AdminLevel))
         conn.commit()
+        conn.close()
         flash('User Added','success')
         return redirect(url_for("users"))
     adminLevel = session['adminLevel']
