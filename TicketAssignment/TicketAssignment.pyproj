@@ -51,10 +51,13 @@
     <Content Include="TicketSystem\static\css\style.css">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="TicketSystem\templates\newuser.html" />
+    <Content Include="TicketSystem\templates\users.html" />
     <Content Include="TicketSystem\templates\activeticketsUser.html" />
     <Content Include="TicketSystem\templates\base.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="TicketSystem\templates\adminDashboard.html" />
     <Content Include="TicketSystem\templates\notAdminErrorPage.html" />
     <Content Include="TicketSystem\templates\editactivetickets.html" />
     <Content Include="TicketSystem\templates\newticket.html" />

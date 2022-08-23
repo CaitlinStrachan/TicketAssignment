@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+{% extends 'base.html' %}
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>New User</title>
+    <style>
+
+    </style>
+</head>
+{% block content%}
+<body>
+    <h1>Add a new user</h1>
+    <br />
+    <form method='post' action='{{url_for("newuser")}}'>
+        <div class='form-group'>
+            <label>Username</label><br />
+            <input type='text' name='Username' required class='form-control' style="height:200px;" />
+        </div>
+        <div class='form-group'>
+            <label>Email</label><br />
+            <input type='text' name='Email' required class='form-control' />
+        </div>
+        <div class='form-group'>
+            <label>Password</label><br />
+            <input type='text' name='Password' required class='form-control' />
+        </div>
+        <h3>Please enter either 'Admin' or 'User' to set relevant admin permissions below</h3>
+        <div class='form-group'>
+            <label>Admin Level</label><br />
+            <input type='text' name='AdminLevel' required class='form-control' />
+        </div>
+        <input type='submit' value='Save' class='btn btn-success'>
+    </form>
+    <br />
+    <a href="users.html" class="btn btn-primary btn-lg">Back to Escalations Portal</a>
+</body>
+{% endblock %}
+</html>

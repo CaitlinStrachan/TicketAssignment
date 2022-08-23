@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Users - Admin</title>
+    <style>
+
+    </style>
+</head>
+{% block content%}
+<body>
+    <h1>Users</h1>
+    <table>
+        <thead>
+        <td>UserID</td>
+        <td>Username</td>
+        <td>Email</td>
+        <td>Password</td>
+        <td>AdminLevel</td>
+        </thead>
+        {% for user in users %}
+        <tr>
+            <td>{{user["UserID"]}}</td>
+            <td>{{user["Username"]}}</td>
+            <td>{{user["Email"]}}</td>
+            <td>{{user["Password"]}}</td>
+            <td>{{user["AdminLevel"]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="newuser" class="btn btn-primary">Add a new User</a>
+    <a href="dashboard" class="btn btn-primary">Back to Escalations Portal</a>
+</body>
+{% endblock %}
+</html>

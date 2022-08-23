@@ -10,6 +10,7 @@ import os
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired 
+import hashlib
 #from forms import LoginForm
 #set secret key 
 secretkey = os.urandom(12).hex()
@@ -64,7 +65,8 @@ def login():
         conn = get_db_connection()
         #cursor = mysql.connection.cursor()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM USERS WHERE Email=? AND Password=?", (email, password,))
+        #check the password using the hash value of the entered password
+        cursor.execute("SELECT * FROM USERS WHERE Email=? AND Password=?", (email, hashlib.md5(password.encode()).hexdigest(),))
         account = cursor.fetchone()
         # If account exists in accounts table in out database
         if account:
@@ -97,7 +99,14 @@ def is_logged_in(f):
 def dashboard():
      # Check if user is loggedin
     if 'loggedin' in session:
-        return render_template('dashboard.html', userID=session['id'])
+        #check if user is admin 
+        adminLevel = session['adminLevel']
+        if 'Admin' in adminLevel:          
+       # User is loggedin show them the home page
+            return render_template("adminDashboard.html", userID=session['id'])
+        else: 
+            return render_template("dashboard.html", userID=session['id'])
+        
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -187,6 +196,46 @@ def deleteticket(TicketID):
     conn.commit()
     #flash('Ticket Deleted','warning')
     return redirect(url_for("activetickets"))
+
+@app.route("/users")
+def users():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    #Load all users
+    cursor.execute('SELECT * FROM USERS')
+    users = cursor.fetchall()
+    #check if user is admin 
+    adminLevel = session['adminLevel']
+    if 'Admin' in adminLevel:          
+       # User is loggedin show them the home page
+       return render_template("users.html", users=users)
+    else: 
+       return render_template("notAdminErrorPage.html")
+
+@app.route("/newuser", methods=['POST','GET'])
+def newuser():
+    if request.method=='POST':
+        Username=request.form['Username']
+        Email=request.form['Email']
+        #get the password 
+        plainPass=request.form['Password']
+        #save the password as a hash 
+        md5 = hashlib.md5(plainPass.encode())
+        #save the password in hex value to allow for saving to the database
+        Password = md5.hexdigest()
+        AdminLevel=request.form['AdminLevel']       
+        conn = get_db_connection()
+        cursor=conn.cursor()
+        cursor.execute("INSERT into USERS (Username,Email,Password,AdminLevel) values (?,?,?,?)",(Username,Email,Password,AdminLevel))
+        conn.commit()
+        flash('User Added','success')
+        return redirect(url_for("users"))
+    adminLevel = session['adminLevel']
+    if 'Admin' in adminLevel:          
+       # User is loggedin show them the home page
+       return render_template("newuser.html")
+    else: 
+       return render_template("notAdminErrorPage.html")    
 
 #logout
 @app.route("/logout")
