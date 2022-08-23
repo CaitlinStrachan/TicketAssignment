@@ -76,11 +76,11 @@ def login():
             session['email'] = account['email']
             session['adminLevel'] = account['AdminLevel']
             # Redirect to home page
-            msg = 'Logged in successfully!'
+            flash('Logged in Successfully','success')
             return redirect('dashboard')
         else:
             # Account doesnt exist or username/password incorrect
-            msg = 'Incorrect username/password!'
+            flash('Incorrect username/password!','danger')
     return render_template("login.html", msg=msg)
 
 #check if user logged in
@@ -142,7 +142,7 @@ def editactivetickets(TicketID):
         cursor.execute("UPDATE Tickets SET Description=?,ProductName=?,TeamID=?,ClientBackup=?,Priority=?,Status=?,DateResolved=? WHERE TicketID=?", (Description,ProductName,TeamID,ClientBackup,Priority,Status,DateResolved,TicketID))
         conn.commit()
         conn.close()
-        flash('Ticket Updated','success')
+        flash('Ticket Updated Successfully','success')
         return redirect(url_for("activetickets"))
     conn = get_db_connection()
     conn.row_factory=sql.Row
@@ -184,7 +184,7 @@ def newticket():
         cursor=conn.cursor()
         cursor.execute("INSERT into Tickets (Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised) values (?,?,?,?,?,?,?)",(Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised))
         conn.commit()
-        flash('Ticket Added','success')
+        flash('Ticket Added Successfully','success')
         return redirect(url_for("dashboard"))   
     return render_template("newticket.html")
 
@@ -194,7 +194,7 @@ def deleteticket(TicketID):
     cursor=conn.cursor()
     cursor.execute("delete from Tickets where TicketID=?",(TicketID,))
     conn.commit()
-    #flash('Ticket Deleted','warning')
+    flash('Ticket Deleted Sucesffully','warning')
     return redirect(url_for("activetickets"))
 
 @app.route("/users")

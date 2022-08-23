@@ -10,6 +10,12 @@
 </head>
 {% block content%}
 <body>
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    <br />
     <h1>Escalations Portal</h1>
     <a href="activetickets" class="btn btn-primary btn-lg">View in progress tickets</a>
     <br />
