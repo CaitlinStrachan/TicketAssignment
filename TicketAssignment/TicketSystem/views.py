@@ -129,6 +129,8 @@ def activetickets():
 @app.route("/activetickets/edit/<string:TicketID>", methods=['POST','GET'])
 def editactivetickets(TicketID):
     if request.method=='POST':
+        #remove stray } from ticket ID 
+        TicketID = TicketID.rstrip('}')
         Description=request.form['Description']
         ProductName=request.form['ProductName']
         TeamID=request.form['TeamID']
