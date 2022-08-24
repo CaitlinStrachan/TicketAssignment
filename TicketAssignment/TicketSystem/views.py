@@ -117,14 +117,16 @@ def activetickets():
     #ONLY LOAD THOSE WITH NOT A 'DONE' STATUS
     cursor.execute('SELECT * FROM Tickets WHERE Status NOT LIKE "Done"')
     tickets = cursor.fetchall()
-    #check if user is admin 
-    adminLevel = session['adminLevel']
-    if 'Admin' in adminLevel:          
-       # User is loggedin show them the home page
-       return render_template("activetickets.html", tickets=tickets)
-    else: 
-       return render_template("activeticketsUser.html", tickets=tickets)
-    
+    if 'loggedin' in session:
+        #check if user is admin 
+        adminLevel = session['adminLevel']
+        if 'Admin' in adminLevel:          
+           # User is loggedin show them the home page
+           return render_template("activetickets.html", tickets=tickets)
+        else: 
+           return render_template("activeticketsUser.html", tickets=tickets)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route("/activetickets/edit/<string:TicketID>", methods=['POST','GET'])
 def editactivetickets(TicketID):
@@ -152,14 +154,16 @@ def editactivetickets(TicketID):
     #ONLY LOAD THE SELECTED TICKET TO EDIT
     cursor.execute('SELECT * FROM Tickets WHERE TicketID=?', [TicketID])
     tickets = cursor.fetchone()
-    #check if user is admin 
-    adminLevel = session['adminLevel']
-    if 'Admin' in adminLevel:          
-       # User is loggedin show them the home page
-       return render_template("editactivetickets.html", tickets=tickets)
-    else: 
-       return render_template("notAdminErrorPage.html", tickets=tickets)
-    
+    if 'loggedin' in session:
+        #check if user is admin 
+        adminLevel = session['adminLevel']
+        if 'Admin' in adminLevel:          
+           # User is loggedin show them the home page
+           return render_template("editactivetickets.html", tickets=tickets)
+        else: 
+           return render_template("notAdminErrorPage.html", tickets=tickets)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route("/completedtickets")
 def completedtickets():
@@ -169,7 +173,10 @@ def completedtickets():
     #ONLY LOAD THOSE WITH A 'DONE' STATUS
     cursor.execute('SELECT * FROM Tickets WHERE Status = "Done"')
     tickets = cursor.fetchall()
-    return render_template("completedtickets.html", tickets=tickets)
+    if 'loggedin' in session:
+        return render_template("completedtickets.html", tickets=tickets)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route("/newticket", methods=['POST','GET'])
 def newticket():
@@ -188,18 +195,24 @@ def newticket():
         conn.commit()
         conn.close()
         flash('Ticket Added Successfully','success')
-        return redirect(url_for("dashboard"))   
-    return render_template("newticket.html")
+        return redirect(url_for("dashboard"))
+    if 'loggedin' in session:
+        return render_template("newticket.html")
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route("/deleteticket/<string:TicketID>",methods=['GET'])
-def deleteticket(TicketID):
-    conn = get_db_connection()
-    cursor=conn.cursor()
-    cursor.execute("delete from Tickets where TicketID=?",(TicketID,))
-    conn.commit()
-    conn.close()
-    flash('Ticket Deleted Sucesffully','warning')
-    return redirect(url_for("activetickets"))
+def deleteticket(TicketID):    
+    if 'loggedin' in session:
+        conn = get_db_connection()
+        cursor=conn.cursor()
+        cursor.execute("delete from Tickets where TicketID=?",(TicketID,))
+        conn.commit()
+        conn.close()    
+        flash('Ticket Deleted Sucesffully','warning')
+        return redirect(url_for("activetickets"))
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route("/users")
 def users():
@@ -210,11 +223,14 @@ def users():
     users = cursor.fetchall()
     #check if user is admin 
     adminLevel = session['adminLevel']
-    if 'Admin' in adminLevel:          
-       # User is loggedin show them the home page
-       return render_template("users.html", users=users)
-    else: 
-       return render_template("notAdminErrorPage.html")
+    if 'loggedin' in session:
+        if 'Admin' in adminLevel:          
+           # User is loggedin show them the home page
+           return render_template("users.html", users=users)
+        else: 
+           return render_template("notAdminErrorPage.html")
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 @app.route("/newuser", methods=['POST','GET'])
 def newuser():
@@ -236,11 +252,14 @@ def newuser():
         flash('User Added','success')
         return redirect(url_for("users"))
     adminLevel = session['adminLevel']
-    if 'Admin' in adminLevel:          
-       # User is loggedin show them the home page
-       return render_template("newuser.html")
-    else: 
-       return render_template("notAdminErrorPage.html")    
+    if 'loggedin' in session:
+        if 'Admin' in adminLevel:          
+           # User is loggedin as admin show them the new user page
+           return render_template("newuser.html")
+        else: 
+           return render_template("notAdminErrorPage.html")  
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 #logout
 @app.route("/logout")

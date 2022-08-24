@@ -1,27 +1,26 @@
 ﻿<!DOCTYPE html>
 {% extends 'base.html' %}
+
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title>Completed Tickets</title>
-    <style>
-
-    </style>
+    
 </head>
 {% block content%}
 <body>
     <h1>Completed tickets</h1>
     <table>
         <thead>
-        <td>ID</td>
-        <td>Description</td>
-        <td>Product Name</td>
-        <td>Team ID</td>
-        <td>Client Backup Location</td>
-        <td>Priortiy</td>
-        <td>Status</td>
-        <td>Date Raised</td>
-        <td>Date Resolved</td>
+        <td>ID  </td>
+        <td>Description  </td>
+        <td>Product Name  </td>
+        <td>Team ID  </td>
+        <td>Client Backup Location  </td>
+        <td>Priortiy  </td>
+        <td>Status  </td>
+        <td>Date Raised  </td>
+        <td>Date Resolved  </td>
         </thead>
         {% for ticket in tickets %}
         <tr>

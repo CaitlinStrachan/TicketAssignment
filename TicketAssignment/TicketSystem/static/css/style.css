@@ -9,9 +9,16 @@ h2 {
 }
 
 thead {
-
+    color:darkslategray;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 body{
     background: #f4f4f4;
+}
+
+td {
+    padding-left: 10px;
+    padding-right: 10px;
 }
