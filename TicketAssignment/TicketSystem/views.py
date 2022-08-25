@@ -8,8 +8,8 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import os
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired 
+#from wtforms import StringField, SubmitField
+#from wtforms.validators import DataRequired 
 import hashlib
 #from forms import LoginForm
 #set secret key 
@@ -30,9 +30,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-#@login_manager.user_loader
-#def load_user(user_ID):
-#    return User.get(userID)
+@login_manager.user_loader
+def load_user(user_ID):
+    return User.get(userID)
 
 #create a form class 
 #class UserForm(FlaskForm):

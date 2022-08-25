@@ -3,7 +3,7 @@ from flaskr import flaskr
 import pytest
 import tempfile
 
-class Test_test1_test(unittest.TestCase):
+class Test_test1_test(pytest.TestCase):
     def setUp(self):
         self.db_fd, flaskr.app.config['ticketdb.db'] = tempfile.mkstemp()
         flaskr.app.testing = True
@@ -22,8 +22,8 @@ class Test_test1_test(unittest.TestCase):
         ), follow_redirects=True)
 
     def test_login(self):
-    rv = self.login('testadmin1@gmail.com', 'testpass')
-    assert b'Logged in succesfully' in rv.data
+        rv = self.login('testadmin1@gmail.com', 'testpass')
+        assert b'Logged in succesfully' in rv.data
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main()
