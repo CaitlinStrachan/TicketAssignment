@@ -16,10 +16,10 @@ class Test_test1_test(unittest.TestCase):
         os.unlink(flaskr.app.config['ticketdb.db'])
 
     def login(self, email, password):
-    return self.app.post('/login', data=dict(
-        email=email,
-        password=password
-    ), follow_redirects=True)
+        return self.app.post('/login', data=dict(
+            email=email,
+            password=password
+        ), follow_redirects=True)
 
     def test_login(self):
     rv = self.login('testadmin1@gmail.com', 'testpass')
