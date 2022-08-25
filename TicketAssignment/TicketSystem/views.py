@@ -25,21 +25,6 @@ app.config['SECRET_KEY'] = secretkey
 # Intialize MySQL
 mysql = MySQL(app)
 
-#initialize log in manager 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-
-@login_manager.user_loader
-def load_user(user_ID):
-    return User.get(userID)
-
-#create a form class 
-#class UserForm(FlaskForm):
- #   username = StringField("Username", validators=[DataRequired()])
-  #  submit = SubmitField("Submit")
-
-
 def get_db_connection():
     conn = sql.connect('ticketdb.db')
     conn.row_factory = sql.Row
