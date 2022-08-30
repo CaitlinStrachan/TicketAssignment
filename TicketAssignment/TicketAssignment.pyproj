@@ -30,15 +30,18 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="models.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="runserver.py" />
-    <Compile Include="Login.py">
+    <Compile Include="test_1.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TicketSystem\populate_db.py" />
     <Compile Include="TicketSystem\create_db.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TicketSystem\views.py">
+    <Compile Include="views.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TicketSystem\__init__.py">
@@ -48,6 +51,7 @@
   <ItemGroup>
     <Content Include="requirements.txt" />
     <Content Include="ticketdb.db" />
+    <Content Include="TicketSystem\chromedriver.exe" />
     <Content Include="TicketSystem\static\css\style.css">
       <SubType>Code</SubType>
     </Content>
