@@ -18,14 +18,12 @@ import secrets
 secretkey = os.urandom(12).hex()
 
 # Enter your database connection details below
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'admin'
-app.config['MYSQL_DB'] = 'ticketdb'
+#app.config['MYSQL_HOST'] = 'localhost'
+#app.config['MYSQL_USER'] = 'root'
+#app.config['MYSQL_PASSWORD'] = 'admin'
+#app.config['MYSQL_DB'] = 'ticketdb'
 app.config['SECRET_KEY'] = secretkey
 
-# Intialize MySQL
-mysql = MySQL(app)
 
 def get_db_connection():
     conn = sql.connect('ticketdb.db')
