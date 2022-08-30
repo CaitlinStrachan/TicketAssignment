@@ -4,7 +4,7 @@ from flask import Flask,render_template,request,redirect,session,url_for,flash
 #from flask_wtf import FlaskForm
 from TicketSystem import app
 import sqlite3 as sql
-from flask_mysqldb import MySQL
+#from flask_mysqldb import MySQL
 #import MySQLdb.cursors
 import os
 #from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
