@@ -1,30 +1,17 @@
 from functools import wraps
-#from winreg import REG_NOTIFY_CHANGE_ATTRIBUTES
 from flask import Flask,render_template,request,redirect,session,url_for,flash
-#from flask_wtf import FlaskForm
 from TicketSystem import app
 import sqlite3 as sql
-#from flask_mysqldb import MySQL
-#import MySQLdb.cursors
 import os
-#from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
-#from wtforms import StringField, SubmitField
-#from wtforms.validators import DataRequired 
 import hashlib
 import secrets
-#from forms import LoginForm
 
 #set secret key 
 secretkey = os.urandom(12).hex()
 
-# Enter your database connection details below
-#app.config['MYSQL_HOST'] = 'localhost'
-#app.config['MYSQL_USER'] = 'root'
-#app.config['MYSQL_PASSWORD'] = 'admin'
-#app.config['MYSQL_DB'] = 'ticketdb'
 app.config['SECRET_KEY'] = secretkey
 
-
+#connect to the database
 def get_db_connection():
     conn = sql.connect('ticketdb.db')
     conn.row_factory = sql.Row
@@ -44,12 +31,11 @@ def login():
         password = request.form['password']
         #check account exists
         conn = get_db_connection()
-        #cursor = mysql.connection.cursor()
         cursor = conn.cursor()
         #check the password using the hash value of the entered password
         cursor.execute("SELECT * FROM USERS WHERE Email=? AND Password=?", (email, hashlib.md5(password.encode()).hexdigest(),))
         account = cursor.fetchone()
-        # If account exists in accounts table in out database
+        # If account exists in users table in database
         if account:
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
@@ -63,18 +49,6 @@ def login():
             # Account doesnt exist or username/password incorrect
             flash('Incorrect username/password!','danger')
     return render_template("login.html")
-
-#check if user logged in
-def is_logged_in(f):
-	@wraps(f)
-	def wrap(*args,**kwargs):
-		if 'logged_in' in session:
-			return f(*args,**kwargs)
-		else:
-			flash('Unauthorized, Please Login','danger')
-			return redirect(url_for('login'))
-	return wrap
-
 
 @app.route("/dashboard")
 def dashboard():
@@ -102,7 +76,7 @@ def activetickets():
         #check if user is admin 
         adminLevel = session['adminLevel']
         if 'Admin' in adminLevel:          
-           # User is loggedin show them the home page
+           # User is loggedin show them the home page depending on admin level
            return render_template("activetickets.html", tickets=tickets)
         else: 
            return render_template("activeticketsUser.html", tickets=tickets)
@@ -114,6 +88,7 @@ def editactivetickets(TicketID):
     if request.method=='POST':
         #remove stray } from ticket ID 
         TicketID = TicketID.rstrip('}')
+        #get user inputs to insert into the database
         Description=request.form['Description']
         ProductName=request.form['ProductName']
         TeamID=request.form['TeamID']
@@ -121,9 +96,11 @@ def editactivetickets(TicketID):
         Priority=request.form['Priortiy']
         Status=request.form['Status']
         #DateRaised=request.form['DateRaised']
-        DateResolved=request.form['DateResolved']       
+        DateResolved=request.form['DateResolved']
+        #connect to database
         conn = get_db_connection()
         cursor=conn.cursor()
+        #edit the database and save
         cursor.execute("UPDATE Tickets SET Description=?,ProductName=?,TeamID=?,ClientBackup=?,Priority=?,Status=?,DateResolved=? WHERE TicketID=?", (Description,ProductName,TeamID,ClientBackup,Priority,Status,DateResolved,TicketID))
         conn.commit()
         conn.close()
@@ -148,7 +125,6 @@ def editactivetickets(TicketID):
 
 @app.route("/completedtickets")
 def completedtickets():
-    """Renders a log in page"""
     conn = get_db_connection()
     cursor = conn.cursor()
     #ONLY LOAD THOSE WITH A 'DONE' STATUS
@@ -162,6 +138,7 @@ def completedtickets():
 @app.route("/newticket", methods=['POST','GET'])
 def newticket():
     if request.method=='POST':
+        #get user inputs 
         Description=request.form['Description']
         ProductName=request.form['ProductName']
         TeamID=request.form['TeamID']
@@ -169,7 +146,7 @@ def newticket():
         Priority=request.form['Priortiy']
         Status=request.form['Status']
         DateRaised=request.form['DateRaised']
-        #DateResolved=request.form['DateResolved']       
+        #Connect to database and add the information to database      
         conn = get_db_connection()
         cursor=conn.cursor()
         cursor.execute("INSERT into Tickets (Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised) values (?,?,?,?,?,?,?)",(Description,ProductName,TeamID,ClientBackup,Priority,Status,DateRaised))
@@ -183,10 +160,13 @@ def newticket():
     return redirect(url_for('login'))
 
 @app.route("/deleteticket/<string:TicketID>",methods=['GET'])
-def deleteticket(TicketID):    
+def deleteticket(TicketID):
+    #check if the user is logged in
     if 'loggedin' in session:
+        #connect to database
         conn = get_db_connection()
         cursor=conn.cursor()
+        #delete the selected ticket 
         cursor.execute("delete from Tickets where TicketID=?",(TicketID,))
         conn.commit()
         conn.close()    
@@ -227,11 +207,13 @@ def newuser():
         AdminLevel=request.form['AdminLevel']       
         conn = get_db_connection()
         cursor=conn.cursor()
+        #add the user to the database
         cursor.execute("INSERT into USERS (Username,Email,Password,AdminLevel) values (?,?,?,?)",(Username,Email,Password,AdminLevel))
         conn.commit()
         conn.close()
         flash('User Added','success')
         return redirect(url_for("users"))
+    #check the user is admin
     adminLevel = session['adminLevel']
     if 'loggedin' in session:
         if 'Admin' in adminLevel:          
@@ -246,7 +228,6 @@ def newuser():
 @app.route("/logout")
 def logout():
 	session.clear()
-	#flash('You are now logged out','success')
 	return redirect(url_for('login'))
 
 if __name__ == "__main__":
